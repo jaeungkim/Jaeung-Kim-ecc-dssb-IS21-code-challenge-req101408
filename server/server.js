@@ -20,7 +20,7 @@ const swaggerOptions = {
       title: "jaeungkim-fullstack API",
       version: "1.0.0",
       description:
-        "API documentation for jaekim's is24-fullstack competition application",
+        "API documentation for jaekim's is21-fullstack competition application",
     },
     servers: [
       {
@@ -103,7 +103,7 @@ connectToDatabase();
 // Define a route to display a welcome message
 app.get("/", (req, res) => {
   res.json({
-    message: "Welcome to jaekim's is24-fullstack competition application.",
+    message: "Welcome to jaekim's is21-fullstack competition application.",
   });
 });
 

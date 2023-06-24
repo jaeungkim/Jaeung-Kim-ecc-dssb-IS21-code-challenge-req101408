@@ -1,7 +1,7 @@
 {
-  "name": "jaeungkim-is24-full-stack-compeition-req97073-server",
+  "name": "jaeungkim-is21-full-stack-compeition-req101408-server",
   "version": "1.0.0",
-  "description": "jaeungkim-is24-full-stack-compeition-req97073-server",
+  "description": "jaeungkim-is21-full-stack-compeition-req101408-server",
   "main": "server.js",
   "scripts": {
     "start": "NODE_ENV=development nodemon server.js",

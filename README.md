@@ -65,7 +65,7 @@ Now, you should be able to see the front end application at http://localhost:303
 
 Here is the sample image at localhost
 
-![alt text](/client/src/assets/frontend.png)
+<!-- ![alt text](/client/src/assets/frontend.png) -->
 
 ### Back-End (Node)
 
