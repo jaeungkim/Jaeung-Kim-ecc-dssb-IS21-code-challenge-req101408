@@ -101,4 +101,4 @@ Now, you should be able to see the back end swagger documentation at http://loca
 
 Here is the sample image at localhost
 
-![alt text](/client/src/assets/swagger.png)
+<!-- ![alt text](/client/src/assets/swagger.png) -->
