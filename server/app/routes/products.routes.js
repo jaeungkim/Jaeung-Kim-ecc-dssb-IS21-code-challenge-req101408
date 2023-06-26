@@ -14,6 +14,7 @@ const productsController = require("../controllers/products.controller");
  *         - scrumMasterName
  *         - startDate
  *         - methodology
+ *         - location
  *       properties:
  *         productId:
  *           type: number
@@ -40,6 +41,9 @@ const productsController = require("../controllers/products.controller");
  *           type: string
  *           enum: [Agile, Waterfall]
  *           description: The development methodology used for the product (either "Agile" or "Waterfall").
+ *         location:
+ *           type: string
+ *           description: The URL of github repository link to a bcgov project
  */
 
 module.exports = (app) => {

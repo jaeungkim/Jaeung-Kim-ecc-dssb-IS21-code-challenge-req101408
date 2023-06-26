@@ -214,6 +214,15 @@ const ProductForm = () => {
             required
             error={errors.startDate}
           />
+                <InputField
+            label="Location"
+            id="location"
+            type="text"
+            value={product.location}
+            onChange={handleChange}
+            required
+            error={errors.location}
+          />
           <div className="mb-4 col-span-2">
             <label
               className="block text-gray-700 font-bold mb-2"

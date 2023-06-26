@@ -111,13 +111,14 @@ const ProductList = () => {
         <table className="table-responsive table-auto border-collapse border border-gray-500">
           <thead>
             <tr className="bg-gray-200">
-              <th className="px-4 py-2">Product Number</th>
-              <th className="px-4 py-2">Product Name</th>
+              <th className="px-4 py-2">Number</th>
+              <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Scrum Master</th>
               <th className="px-4 py-2">Product Owner</th>
               <th className="px-4 py-2">Developer Names</th>
               <th className="px-4 py-2">Start Date</th>
               <th className="px-4 py-2">Methodology</th>
+              <th className="px-4 py-2">Location</th>
               <th className="px-4 py-2">Actions</th>
             </tr>
           </thead>
@@ -213,6 +214,30 @@ const ProductList = () => {
                     />
                   ) : (
                     product.startDate && product.startDate.slice(0, 10)
+                  )}
+                </td>
+                <td className="border px-4 py-2">
+                  {editingProduct &&
+                  editingProduct.productId === product.productId ? (
+                    <input
+                      type="text"
+                      value={editingProduct.location}
+                      onChange={(e) =>
+                        setEditingProduct({
+                          ...editingProduct,
+                          location: e.target.value,
+                        })
+                      }
+                      className="border px-2 py-1 rounded-lg w-full max-w-xs"
+                    />
+                  ) : (
+                    <a
+                      className="text-blue-600 hover:underline"
+                      href={product.location}
+                      target="_blank"
+                    >
+                      {product.location}
+                    </a>
                   )}
                 </td>
                 <td className="border px-4 py-2">

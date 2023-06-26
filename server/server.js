@@ -6,11 +6,13 @@ const Product = require("./app/models/product.model");
 const { faker } = require("@faker-js/faker");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
+const fs = require("fs").promises;
 
 // Configuration
 const port = 3000;
 const corsOptions = { credentials: true, origin: ["http://localhost:3030"] };
-const connectionString = "mongodb://localhost:27017/jaeungkim-fullstack-db";
+const connectionString =
+  "mongodb://localhost:27017/is21-jaeungkim-fullstack-db";
 const mongoOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
 const swaggerOptions = {
@@ -57,6 +59,16 @@ async function connectToDatabase() {
     process.exit(1);
   }
 }
+async function fetchAllRepos() {
+  try {
+    const data = await fs.readFile("./repos.json", "utf8");
+    const repos = JSON.parse(data);
+    return repos;
+  } catch (err) {
+    console.error("Error reading file from disk:", err);
+    throw err; // Re-throw the error to be caught by the caller
+  }
+}
 
 async function seedProducts() {
   const numProducts = 40;
@@ -79,20 +91,37 @@ async function seedProducts() {
     "Isabella Wong",
     "Jack Lee",
   ];
-  const products = Array.from({ length: numProducts }, (_, i) => ({
-    productId: i + 1,
-    productName: faker.commerce.productName(),
-    productOwnerName: faker.name.fullName(),
-    developers: Array.from(
-      { length: faker.datatype.number({ min: 1, max: 5 }) },
-      () => {
-        return faker.helpers.arrayElement(developerNames);
-      }
-    ),
-    scrumMasterName: faker.helpers.arrayElement(scrumMasters),
-    startDate: faker.date.past(),
-    methodology: faker.helpers.arrayElement(["Agile", "Waterfall"]),
-  }));
+
+  const products = [];
+  const repos = await fetchAllRepos();
+  if (!repos) {
+    console.error("Failed to fetch repositories");
+    return;
+  }
+
+  for (let i = 0; i < numProducts; i++) {
+    const randomRepo = repos[Math.floor(Math.random() * repos.length)];
+    if (!randomRepo || !randomRepo.html_url) {
+      console.error("Failed to select random repository:", randomRepo);
+      continue;
+    }
+    const product = {
+      productId: i + 1,
+      productName: faker.commerce.productName(),
+      productOwnerName: faker.name.fullName(),
+      developers: Array.from(
+        { length: faker.datatype.number({ min: 1, max: 5 }) },
+        () => {
+          return faker.helpers.arrayElement(developerNames);
+        }
+      ),
+      scrumMasterName: faker.helpers.arrayElement(scrumMasters),
+      startDate: faker.date.past(),
+      methodology: faker.helpers.arrayElement(["Agile", "Waterfall"]),
+      location: randomRepo.html_url,
+    };
+    products.push(product);
+  }
 
   await Product.insertMany(products);
   console.log("Added new products");
