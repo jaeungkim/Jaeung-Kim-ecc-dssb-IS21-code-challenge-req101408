@@ -214,7 +214,7 @@ const ProductForm = () => {
             required
             error={errors.startDate}
           />
-                <InputField
+          <InputField
             label="Location"
             id="location"
             type="text"
