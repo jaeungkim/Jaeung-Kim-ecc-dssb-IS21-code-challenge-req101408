@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import ProductSearch from "./ProductSearch";
 import axios from "axios";
 import repos from "../repos.json";
+import DevelopersInput from "./DevelopersInput";
 
 // The ProductList component displays a list of products with their details
 const ProductList = () => {
@@ -15,6 +16,7 @@ const ProductList = () => {
   const [developerSearchText, setDeveloperSearchText] = useState(""); // Developer search text
   const [filteredProducts, setFilteredProducts] = useState([]); // Filtered list of products
   const [apiError, setApiError] = useState(false); // API error flag
+  const [locations, setLocations] = useState([]);
 
   // Handles clicking the edit button for a product
   const handleEditClick = (product) => {
@@ -78,6 +80,11 @@ const ProductList = () => {
   }, [scrumMasterSearchText, developerSearchText, products]);
 
   const totalProductsCount = filteredProducts.length;
+
+  useEffect(() => {
+    const htmlUrls = repos.map((item) => item.html_url);
+    setLocations(htmlUrls);
+  }, []);
 
   // Renders the component UI
   return (
@@ -183,62 +190,180 @@ const ProductList = () => {
 
                 {/* Form for editing */}
                 <div className="mt-2">
-                  <label
-                    htmlFor="productName"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Product Name
-                  </label>
-                  <input
-                    type="text"
-                    id="productName"
-                    name="productName"
-                    value={editingProduct.productName}
-                    onChange={(e) =>
-                      setEditingProduct({
-                        ...editingProduct,
-                        productName: e.target.value,
-                      })
+                  {/* Product Name Field */}
+                  <div>
+                    <label
+                      htmlFor="productName"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Product Name
+                    </label>
+                    <input
+                      type="text"
+                      id="productName"
+                      name="productName"
+                      value={editingProduct.productName}
+                      onChange={(e) =>
+                        setEditingProduct({
+                          ...editingProduct,
+                          productName: e.target.value,
+                        })
+                      }
+                      className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+
+                  {/* Scrum Master Name Field */}
+                  <div>
+                    <label
+                      htmlFor="scrumMasterName"
+                      className="block mt-2 text-sm font-medium text-gray-700"
+                    >
+                      Scrum Master Name
+                    </label>
+                    <input
+                      type="text"
+                      id="scrumMasterName"
+                      name="scrumMasterName"
+                      value={editingProduct.scrumMasterName}
+                      onChange={(e) =>
+                        setEditingProduct({
+                          ...editingProduct,
+                          scrumMasterName: e.target.value,
+                        })
+                      }
+                      className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+
+                  {/* Product Owner Name Field */}
+                  <div>
+                    <label
+                      htmlFor="productOwnerName"
+                      className="block mt-2 text-sm font-medium text-gray-700"
+                    >
+                      Product Owner Name
+                    </label>
+                    <input
+                      type="text"
+                      id="productOwnerName"
+                      name="productOwnerName"
+                      value={editingProduct.productOwnerName}
+                      onChange={(e) =>
+                        setEditingProduct({
+                          ...editingProduct,
+                          productOwnerName: e.target.value,
+                        })
+                      }
+                      className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+
+                  {/* Developers Field */}
+                  <DevelopersInput
+                    developers={editingProduct.developers}
+                    setDevelopers={(developers) =>
+                      setEditingProduct({ ...editingProduct, developers })
                     }
-                    className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                   />
 
-                  <label
-                    htmlFor="scrumMasterName"
-                    className="block mt-2 text-sm font-medium text-gray-700"
-                  >
-                    Scrum Master Name
-                  </label>
-                  <input
-                    type="text"
-                    id="scrumMasterName"
-                    name="scrumMasterName"
-                    value={editingProduct.scrumMasterName}
-                    onChange={(e) =>
-                      setEditingProduct({
-                        ...editingProduct,
-                        scrumMasterName: e.target.value,
-                      })
-                    }
-                    className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                  />
-                </div>
+                  {/* Start Date Field */}
+                  <div>
+                    <label
+                      htmlFor="startDate"
+                      className="block mt-2 text-sm font-medium text-gray-700"
+                    >
+                      Start Date
+                    </label>
+                    <input
+                      type="date"
+                      id="startDate"
+                      name="startDate"
+                      value={
+                        editingProduct.startDate
+                          ? new Date(editingProduct.startDate)
+                              .toISOString()
+                              .split("T")[0]
+                          : ""
+                      }
+                      onChange={(e) =>
+                        setEditingProduct({
+                          ...editingProduct,
+                          startDate: e.target.value,
+                        })
+                      }
+                      className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
 
-                <div className="mt-4">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={() => updateProduct(editingProduct)}
-                  >
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    className="ml-4 inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
-                    onClick={() => setIsModalOpen(false)}
-                  >
-                    Cancel
-                  </button>
+                  {/* Methodology Field */}
+                  <div>
+                    <label
+                      htmlFor="methodology"
+                      className="block mt-2 text-sm font-medium text-gray-700"
+                    >
+                      Methodology
+                    </label>
+                    <input
+                      type="text"
+                      id="methodology"
+                      name="methodology"
+                      value={editingProduct.methodology}
+                      onChange={(e) =>
+                        setEditingProduct({
+                          ...editingProduct,
+                          methodology: e.target.value,
+                        })
+                      }
+                      className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+
+                  {/* Location Field */}
+                  <div>
+                    <label
+                      htmlFor="location"
+                      className="block mt-2 text-sm font-medium text-gray-700"
+                    >
+                      Location
+                    </label>
+                    <select
+                      id="location"
+                      name="location"
+                      value={editingProduct.location}
+                      onChange={(e) =>
+                        setEditingProduct({
+                          ...editingProduct,
+                          location: e.target.value,
+                        })
+                      }
+                      className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    >
+                      {locations.map((location, index) => (
+                        <option key={index} value={location}>
+                          {location}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Save and Cancel Buttons */}
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                      onClick={() => updateProduct(editingProduct)}
+                    >
+                      Save
+                    </button>
+                    <button
+                      type="button"
+                      className="ml-4 inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
+                      onClick={() => setIsModalOpen(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
