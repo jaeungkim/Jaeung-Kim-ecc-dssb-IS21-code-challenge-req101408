@@ -1,0 +1,39 @@
+services:
+  ##### FRONTEND (NodeJS React) #####
+  frontend:
+    container_name: jaeung-kim-is21-frontend
+    tty: true
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    networks:
+      - jaeung-kim-is21-network
+    ports:
+      - 3030:3030
+    volumes:
+      - ./client/src:/app/src
+
+  ##### BACKEND (NodeJS Express API) #####
+  backend:
+    container_name: jaeung-kim-is21-backend
+    tty: true
+    init: true # Properly handles running as PID 1 inside a container. Source: https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#handling-kernel-signals
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    networks:
+      - jaeung-kim-is21-network
+    ports:
+      - 3000:3000
+    volumes:
+      - ./backend:/app
+    environment:
+      - PORT=8008
+      - FRONTEND_URL=http://localhost:3030
+      - BACKEND_URL=http://localhost:3000
+
+networks:
+  jaeung-kim-is21-network:
+    driver: "bridge" # Internal network that allows containers to communicate with each other.
