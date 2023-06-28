@@ -9,9 +9,18 @@
 
 ## Introduction
 
-The BC Government Ministry of Citizens' Services Information Management Branch (IMB) is currently trying to catalog current modern web applications in GitHub, as well as new products that are coming up in the future. Currently, there are 40 products marked for modernization that need to be cataloged, as well as 3 products that are either actively being developed or in a maintenance lifecycle.
+The BC Government Ministry of Education and Child Care (ECC) is currently trying to
+catalog current modern web applications in GitHub, as well as new products that are
+coming up in the future. Currently there are 40 products marked for modernization that
+need to be catalogued, as well as 3 products that are either actively being developed or in a
+maintenance lifecycle.
 
-This application provides a simple way to display, create and edit information related to these web applications. The user base for this application will include a wide array of technical skills, therefore making this application as simple as possible to use is being stressed by the IMB Senior Leadership Team (SLT).
+Product owners have expressed the desire to communicate to the branch where these
+products are housed (GitHub Repository).
+
+The user base for this application will include a wide array of technical skills, therefore
+making this application as simple as possible to display, create and edit information is
+being stressed by the ECC Senior Leadership Team (SLT).
 
 ## Technologies Used
 
