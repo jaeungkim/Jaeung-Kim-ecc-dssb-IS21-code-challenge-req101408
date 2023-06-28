@@ -48,7 +48,7 @@ To run the application, please follow the steps below:
 cd Jaeung-Kim-ecc-dssb-IS21-code-challenge-req101408
 ```
 
-### Project
+## Project
 
 1. Open Terminal and install dependencies. This will install both frontend and backend dependencies
 
@@ -65,7 +65,7 @@ npm run up
 Now, you should be able to see the front end application at http://localhost:3030/
 And, you can also see the back end swagger documentation at http://localhost:3000/api/api-docs
 
-### Docker
+## Docker
 
 While docker is initializing at backend process,
 
