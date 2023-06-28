@@ -3,19 +3,7 @@ import axios from "axios";
 import repos from "../repos.json";
 import DevelopersInput from "./DevelopersInput";
 
-// InputField component to handle input fields
-const InputField = ({
-  label,
-  id,
-  type,
-  value,
-  onChange,
-  required,
-  error,
-  tooltip,
-}) => {
-  const [showTooltip, setShowTooltip] = useState(false);
-
+const InputField = ({ label, id, type, value, onChange, required, error }) => {
   return (
     <div className="mb-4">
       <label className="block text-gray-700 font-bold mb-2" htmlFor={id}>
@@ -31,19 +19,7 @@ const InputField = ({
           value={value}
           onChange={onChange}
           required={required}
-          onFocus={() => setShowTooltip(true)}
-          onBlur={() => setShowTooltip(false)}
         />
-        {tooltip && (
-          <div
-            className={`${
-              showTooltip ? "visible" : "invisible"
-            } absolute z-10 text-gray-800 bg-gray-100 border border-gray-300 rounded py-1 px-2`}
-            style={{ maxWidth: "200px" }}
-          >
-            <span>{tooltip}</span>
-          </div>
-        )}
       </div>
       {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
     </div>
@@ -59,8 +35,6 @@ const DropdownField = ({
   error,
   options,
 }) => {
-  const [showTooltip, setShowTooltip] = useState(false);
-
   return (
     <div className="mb-4">
       <label className="block text-gray-700 font-bold mb-2" htmlFor={id}>
@@ -90,7 +64,6 @@ const DropdownField = ({
 };
 
 const ProductForm = () => {
-  // Initial state for the product object
   const initialProduct = {
     productName: "",
     scrumMasterName: "",
@@ -101,7 +74,6 @@ const ProductForm = () => {
     location: "",
   };
 
-  // Initial state for errors object
   const initialErrors = {
     productName: "",
     scrumMasterName: "",
@@ -112,17 +84,10 @@ const ProductForm = () => {
     location: "",
   };
 
-  // State for number of developers
-  const [numDevelopers, setNumDevelopers] = useState(0);
-  // State for the product object
   const [product, setProduct] = useState(initialProduct);
-  // State for developers
   const [developers, setDevelopers] = useState([]);
-  // State for errors object
   const [errors, setErrors] = useState(initialErrors);
-  // State for messages
   const [message, setMessage] = useState({ type: "", text: "" });
-
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
@@ -181,10 +146,13 @@ const ProductForm = () => {
       return;
     }
 
+    const productWithDevelopers = {...product, developers};
+
     try {
-      await axios.post("http://localhost:3000/api/product/addProduct", product);
+      await axios.post("http://localhost:3000/api/product/addProduct", productWithDevelopers);
       setMessage({ type: "success", text: "Product added successfully!" });
       setProduct(initialProduct);
+      setDevelopers([]);
       setErrors(initialErrors);
     } catch (error) {
       if (error.response) {
@@ -290,11 +258,7 @@ const ProductForm = () => {
         </div>
         <button
           type="submit"
-          className={`inline-flex justify-center px-4 py-2 text-sm font-medium border border-transparent rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
-            errors
-              ? "text-gray-500 bg-gray-200"
-              : "text-blue-900 bg-blue-100 hover:bg-blue-200 focus-visible:ring-blue-500"
-          }`}
+          className="inline-flex justify-center px-4 py-2 text-sm font-medium border border-transparent rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-blue-900 bg-blue-100 hover:bg-blue-200 focus-visible:ring-blue-500"
         >
           Save
         </button>
