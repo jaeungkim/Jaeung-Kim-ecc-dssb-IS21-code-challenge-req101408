@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { Fragment } from "react";
 import axios from "axios";
 import repos from "../repos.json";
@@ -13,6 +13,22 @@ const ProductList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const [apiError, setApiError] = useState(false); // API error flag
   const [locations, setLocations] = useState([]);
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deletingProduct, setDeletingProduct] = useState(null);
+
+  const handleDeleteClick = (product) => {
+    setDeletingProduct(product);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeleteProduct = async () => {
+    if (deletingProduct) {
+      await deleteProduct(deletingProduct.productId);
+      setDeletingProduct(null);
+      setIsDeleteModalOpen(false);
+    }
+  };
 
   // Handles clicking the edit button for a product
   const handleEditClick = (product) => {
@@ -62,6 +78,22 @@ const ProductList = () => {
     setLocations(htmlUrls);
   }, []);
 
+  // Deletes a product by making a DELETE request to the API
+  const deleteProduct = async (productId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/product/${productId}`
+      );
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product.productId !== productId)
+      );
+      setApiError(false);
+    } catch (error) {
+      console.error(error);
+      setApiError(true);
+    }
+  };
+
   // Renders the component UI
   return (
     <div className="container mx-auto mt-4">
@@ -94,42 +126,47 @@ const ProductList = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product)=> (
+            {products.map((product) => (
               <tr key={product.productId} className="hover:bg-gray-100">
-              <td className="border px-4 py-2">{product.productId}</td>
-              <td className="border px-4 py-2">{product.productName}</td>
-              <td className="border px-4 py-2">{product.scrumMasterName}</td>
-              <td className="border px-4 py-2">{product.productOwnerName}</td>
-              <td className="border px-4 py-2">
-                {product.developers.join(", ")}
-              </td>
-              <td className="border px-4 py-2">
-                {product.startDate && product.startDate.slice(0, 10)}
-              </td>
-              <td className="border px-4 py-2">{product.methodology}</td>
-              <td className="border px-4 py-2">
-                <a
-                  href={product.location}
-                  className="text-blue-600 hover:underline"
-                >
-                  {product.location}
-                </a>
-              </td>
-
-              <td className="border px-4 py-2">
-                <div className="flex">
-                  <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
-                    onClick={() => handleEditClick(product)}
+                <td className="border px-4 py-2">{product.productId}</td>
+                <td className="border px-4 py-2">{product.productName}</td>
+                <td className="border px-4 py-2">{product.scrumMasterName}</td>
+                <td className="border px-4 py-2">{product.productOwnerName}</td>
+                <td className="border px-4 py-2">
+                  {product.developers.join(", ")}
+                </td>
+                <td className="border px-4 py-2">
+                  {product.startDate && product.startDate.slice(0, 10)}
+                </td>
+                <td className="border px-4 py-2">{product.methodology}</td>
+                <td className="border px-4 py-2">
+                  <a
+                    href={product.location}
+                    className="text-blue-600 hover:underline"
                   >
-                    Edit
-                  </button>
-                </div>
-              </td>
-            </tr>
+                    {product.location}
+                  </a>
+                </td>
 
+                <td className="border px-4 py-2">
+                  <div className="flex">
+                    <button
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
+                      onClick={() => handleEditClick(product)}
+                    >
+                      Edit
+                    </button>
+                    {/* Delete button with handleDeleteClick */}
+                    <button
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ml-2"
+                      onClick={() => handleDeleteClick(product)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
             ))}
-            
           </tbody>
         </table>
       </div>
@@ -181,7 +218,7 @@ const ProductList = () => {
                           productName: e.target.value,
                         })
                       }
-                      className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     />
                   </div>
 
@@ -204,7 +241,7 @@ const ProductList = () => {
                           scrumMasterName: e.target.value,
                         })
                       }
-                      className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     />
                   </div>
 
@@ -227,7 +264,7 @@ const ProductList = () => {
                           productOwnerName: e.target.value,
                         })
                       }
-                      className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     />
                   </div>
 
@@ -264,7 +301,7 @@ const ProductList = () => {
                           startDate: e.target.value,
                         })
                       }
-                      className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     />
                   </div>
 
@@ -276,7 +313,7 @@ const ProductList = () => {
                     >
                       Methodology
                     </label>
-                    <input
+                    <select
                       type="text"
                       id="methodology"
                       name="methodology"
@@ -287,8 +324,11 @@ const ProductList = () => {
                           methodology: e.target.value,
                         })
                       }
-                      className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                    />
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                      <option value="Agile">Agile</option>
+                      <option value="Waterfall">Waterfall</option>
+                    </select>
                   </div>
 
                   {/* Location Field */}
@@ -309,7 +349,7 @@ const ProductList = () => {
                           location: e.target.value,
                         })
                       }
-                      className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
                       {locations.map((location, index) => (
                         <option key={index} value={location}>
@@ -336,6 +376,61 @@ const ProductList = () => {
                       Cancel
                     </button>
                   </div>
+                </div>
+              </div>
+            </div>
+          </Dialog>
+        )}
+      </Transition>
+
+      <Transition appear show={isDeleteModalOpen}>
+        {deletingProduct && (
+          <Dialog
+            open={true}
+            onClose={() => setIsDeleteModalOpen(false)}
+            className="fixed z-10 inset-0 overflow-y-auto"
+          >
+            <div className="min-h-screen px-4 text-center">
+              <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+
+              <span
+                className="inline-block h-screen align-middle"
+                aria-hidden="true"
+              >
+                &#8203;
+              </span>
+
+              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <Dialog.Title
+                  as="h3"
+                  className="text-lg font-medium leading-6 text-gray-900"
+                >
+                  Confirm Delete
+                </Dialog.Title>
+
+                <div className="mt-2">
+                  <p className="text-sm text-gray-500">
+                    Are you sure you want to delete the product "
+                    {deletingProduct.productName}"? This action cannot be
+                    undone.
+                  </p>
+                </div>
+
+                <div className="mt-4">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
+                    onClick={confirmDeleteProduct}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    type="button"
+                    className="ml-4 inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                    onClick={() => setIsDeleteModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             </div>

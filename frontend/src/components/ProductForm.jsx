@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import repos from "../repos.json";
+import DevelopersInput from "./DevelopersInput";
 
 // InputField component to handle input fields
 const InputField = ({
@@ -21,7 +23,7 @@ const InputField = ({
       </label>
       <div className="relative">
         <input
-          className={`appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
             error ? "border-red-500" : ""
           }`}
           id={id}
@@ -48,6 +50,45 @@ const InputField = ({
   );
 };
 
+const DropdownField = ({
+  label,
+  id,
+  value,
+  onChange,
+  required,
+  error,
+  options,
+}) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  return (
+    <div className="mb-4">
+      <label className="block text-gray-700 font-bold mb-2" htmlFor={id}>
+        {label}:
+      </label>
+      <div className="relative">
+        <select
+          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+            error ? "border-red-500" : ""
+          }`}
+          id={id}
+          value={value}
+          onChange={onChange}
+          required={required}
+        >
+          <option value="">Select Repository Link</option>
+          {options.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+        {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+      </div>
+    </div>
+  );
+};
+
 const ProductForm = () => {
   // Initial state for the product object
   const initialProduct = {
@@ -57,6 +98,7 @@ const ProductForm = () => {
     developers: "",
     startDate: "",
     methodology: "",
+    location: "",
   };
 
   // Initial state for errors object
@@ -67,17 +109,26 @@ const ProductForm = () => {
     startDate: "",
     methodology: "",
     developers: "",
+    location: "",
   };
 
   // State for number of developers
   const [numDevelopers, setNumDevelopers] = useState(0);
   // State for the product object
   const [product, setProduct] = useState(initialProduct);
+  // State for developers
+  const [developers, setDevelopers] = useState([]);
   // State for errors object
   const [errors, setErrors] = useState(initialErrors);
   // State for messages
   const [message, setMessage] = useState({ type: "", text: "" });
 
+  const [locations, setLocations] = useState([]);
+
+  useEffect(() => {
+    const htmlUrls = repos.map((item) => item.html_url);
+    setLocations(htmlUrls);
+  }, []);
   // Event handler for input fields change
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -118,7 +169,7 @@ const ProductForm = () => {
       }
     });
 
-    if (product.developers.trim() === "") {
+    if (developers.length === 0) {
       setError("developers", "Developers are required");
       valid = false;
     }
@@ -153,7 +204,7 @@ const ProductForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto px-6 py-4 bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="max-w-3xl mx-auto px-6 py-4 bg-white shadow-lg rounded-lg overflow-hidden">
       <h1 className="text-2xl font-bold mb-4">Add New Product</h1>
       {message.type === "success" && (
         <div className="bg-green-200 text-green-800 py-2 px-4 mb-4">
@@ -195,7 +246,7 @@ const ProductForm = () => {
             required
             error={errors.productOwnerName}
           />
-          <InputField
+          {/* <InputField
             label="Developers"
             id="developers"
             type="text"
@@ -204,6 +255,10 @@ const ProductForm = () => {
             required
             error={errors.developers}
             tooltip="Separate multiple developer names with commas"
+          /> */}
+          <DevelopersInput
+            developers={developers}
+            setDevelopers={setDevelopers}
           />
           <InputField
             label="Start Date"
@@ -214,14 +269,14 @@ const ProductForm = () => {
             required
             error={errors.startDate}
           />
-          <InputField
+          <DropdownField
             label="Location"
             id="location"
-            type="text"
             value={product.location}
             onChange={handleChange}
             required
             error={errors.location}
+            options={locations}
           />
           <div className="mb-4 col-span-2">
             <label

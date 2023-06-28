@@ -162,4 +162,36 @@ module.exports = (app) => {
    *         description: Server error
    */
   app.put("/api/product/:productId", productsController.updateProduct);
+
+  /**
+   * @swagger
+   * /api/product/{productId}:
+   *   delete:
+   *     summary: Delete a product by ID
+   *     tags: [Products]
+   *     parameters:
+   *       - in: path
+   *         name: productId
+   *         schema:
+   *           type: integer
+   *         required: true
+   *         description: The product ID
+   *     responses:
+   *       200:
+   *         description: Product deleted successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                 message:
+   *                   type: string
+   *       404:
+   *         description: Product not found
+   *       500:
+   *         description: Server error
+   */
+  app.delete("/api/product/:productId", productsController.deleteProduct);
 };
