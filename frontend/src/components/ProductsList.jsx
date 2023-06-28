@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import ProductSearch from "./ProductSearch";
 import axios from "axios";
 import repos from "../repos.json";
 import DevelopersInput from "./DevelopersInput";
@@ -12,9 +11,6 @@ const ProductList = () => {
   const [products, setProducts] = useState([]); // List of products
   const [editingProduct, setEditingProduct] = useState(null); // Product being edited
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-  const [scrumMasterSearchText, setScrumMasterSearchText] = useState(""); // Scrum master search text
-  const [developerSearchText, setDeveloperSearchText] = useState(""); // Developer search text
-  const [filteredProducts, setFilteredProducts] = useState([]); // Filtered list of products
   const [apiError, setApiError] = useState(false); // API error flag
   const [locations, setLocations] = useState([]);
 
@@ -61,26 +57,6 @@ const ProductList = () => {
     fetchData();
   }, []);
 
-  // Filters the list of products based on search criteria
-  useEffect(() => {
-    const filtered = products.filter((product) => {
-      const scrumMasterMatch =
-        scrumMasterSearchText === "" ||
-        product.scrumMasterName
-          .toLowerCase()
-          .includes(scrumMasterSearchText.toLowerCase());
-      const developerMatch =
-        developerSearchText === "" ||
-        product.developers.some((dev) =>
-          dev.toLowerCase().includes(developerSearchText.toLowerCase())
-        );
-      return scrumMasterMatch && developerMatch;
-    });
-    setFilteredProducts(filtered);
-  }, [scrumMasterSearchText, developerSearchText, products]);
-
-  const totalProductsCount = filteredProducts.length;
-
   useEffect(() => {
     const htmlUrls = repos.map((item) => item.html_url);
     setLocations(htmlUrls);
@@ -99,14 +75,8 @@ const ProductList = () => {
       )}
       <div className="flex justify-between items-center mb-4">
         <p className="text-lg font-bold">
-          Total Number of Products: {totalProductsCount}
+          Total Number of Products: {products.length}
         </p>
-        <ProductSearch
-          scrumMasterSearchText={scrumMasterSearchText}
-          setScrumMasterSearchText={setScrumMasterSearchText}
-          developerSearchText={developerSearchText}
-          setDeveloperSearchText={setDeveloperSearchText}
-        />
       </div>
       <div className="overflow-x-auto w-full">
         <table className="table-responsive table-auto border-collapse border border-gray-500">
@@ -124,40 +94,42 @@ const ProductList = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredProducts.map((product) => (
+            {products.map((product)=> (
               <tr key={product.productId} className="hover:bg-gray-100">
-                <td className="border px-4 py-2">{product.productId}</td>
-                <td className="border px-4 py-2">{product.productName}</td>
-                <td className="border px-4 py-2">{product.scrumMasterName}</td>
-                <td className="border px-4 py-2">{product.productOwnerName}</td>
-                <td className="border px-4 py-2">
-                  {product.developers.join(", ")}
-                </td>
-                <td className="border px-4 py-2">
-                  {product.startDate && product.startDate.slice(0, 10)}
-                </td>
-                <td className="border px-4 py-2">{product.methodology}</td>
-                <td className="border px-4 py-2">
-                  <a
-                    href={product.location}
-                    className="text-blue-600 hover:underline"
-                  >
-                    {product.location}
-                  </a>
-                </td>
+              <td className="border px-4 py-2">{product.productId}</td>
+              <td className="border px-4 py-2">{product.productName}</td>
+              <td className="border px-4 py-2">{product.scrumMasterName}</td>
+              <td className="border px-4 py-2">{product.productOwnerName}</td>
+              <td className="border px-4 py-2">
+                {product.developers.join(", ")}
+              </td>
+              <td className="border px-4 py-2">
+                {product.startDate && product.startDate.slice(0, 10)}
+              </td>
+              <td className="border px-4 py-2">{product.methodology}</td>
+              <td className="border px-4 py-2">
+                <a
+                  href={product.location}
+                  className="text-blue-600 hover:underline"
+                >
+                  {product.location}
+                </a>
+              </td>
 
-                <td className="border px-4 py-2">
-                  <div className="flex">
-                    <button
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
-                      onClick={() => handleEditClick(product)}
-                    >
-                      Edit
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              <td className="border px-4 py-2">
+                <div className="flex">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
+                    onClick={() => handleEditClick(product)}
+                  >
+                    Edit
+                  </button>
+                </div>
+              </td>
+            </tr>
+
             ))}
+            
           </tbody>
         </table>
       </div>

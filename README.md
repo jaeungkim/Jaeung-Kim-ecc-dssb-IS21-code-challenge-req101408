@@ -36,6 +36,8 @@ git clone https://github.com/jaeungkim/Jaeung-Kim-ecc-dssb-IS21-code-challenge-r
 
 3. Install MongoDB if it is not already installed on your machine. You can refer to https://www.mongodb.com/docs/manual/installation/
 
+4. Install Docker if it is not already installed on your machine. 
+
 ## Usage
 
 To run the application, please follow the steps below:
@@ -48,43 +50,27 @@ cd Jaeung-Kim-ecc-dssb-IS21-code-challenge-req101408
 
 ### Front-End (React)
 
-1. Open Terminal and navigate to the "frontend" folder and install dependencies. (Front-End)
+1. Open Terminal and install dependencies.
 
 ```bash
-cd Jaeung-Kim-ecc-dssb-IS21-code-challenge-req101408/frontend
-npm install
+npm run init
 ```
 
 2. Run the application
 
 ```bash
-npm start
+npm run up
 ```
 
 Now, you should be able to see the front end application at http://localhost:3030/
 
-Here is the sample image at localhost
+### Docker
 
-<!-- ![alt text](/frontend/src/assets/frontend.png) -->
-
-### Back-End (Node)
-
-1. Open Separate Terminal, navigate to the "backend" folder and install dependencies. (Back-End)
-
-```bash
-cd Jaeung-Kim-ecc-dssb-IS21-code-challenge-req101408/backend
-npm install
-```
-
-2. Run the Application
-
-```bash
-npm run dev
-```
+While docker is initializing at backend process,
 
 Faker.js will automatically populate your mongodb database with 40 products.
 
-It will display the following upon successful connection
+It will display the following upon successful docker compose.
 
 ```bash
 [nodemon] 2.0.20
@@ -98,7 +84,3 @@ Added new products
 ```
 
 Now, you should be able to see the back end swagger documentation at http://localhost:3000/api/api-docs
-
-Here is the sample image at localhost
-
-<!-- ![alt text](/frontend/src/assets/swagger.png) -->
