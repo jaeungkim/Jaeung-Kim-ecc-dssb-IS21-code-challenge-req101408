@@ -18,4 +18,4 @@ RUN npm i
 EXPOSE 9000
 
 # Start the development server.
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "prod"]
