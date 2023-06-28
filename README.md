@@ -17,8 +17,8 @@ This application provides a simple way to display, create and edit information r
 
 The following technologies were used in building this web application:
 
-- Backend: Node.js, Express.js, Faker.js,
-- Frontend: React, Tailwind CSS
+- Backend: Node.js, Express.js, Faker.js, Docker
+- Frontend: React, Tailwind CSS, Headless UI
 - Database: MongoDB
 - Documentation: Swagger
 
@@ -48,21 +48,22 @@ To run the application, please follow the steps below:
 cd Jaeung-Kim-ecc-dssb-IS21-code-challenge-req101408
 ```
 
-### Front-End (React)
+### Project
 
-1. Open Terminal and install dependencies.
+1. Open Terminal and install dependencies. This will install both frontend and backend dependencies
 
 ```bash
 npm run init
 ```
 
-2. Run the application
-
+2. Run the application. This will run `docker compose up -d`.
+`
 ```bash
 npm run up
 ```
 
 Now, you should be able to see the front end application at http://localhost:3030/
+And, you can also see the back end swagger documentation at http://localhost:3000/api/api-docs
 
 ### Docker
 
@@ -71,6 +72,8 @@ While docker is initializing at backend process,
 Faker.js will automatically populate your mongodb database with 40 products.
 
 It will display the following upon successful docker compose.
+
+It might take couple minutes to fully propagate.
 
 ```bash
 [nodemon] 2.0.20
@@ -83,4 +86,3 @@ Successfully connected to MongoDB
 Added new products
 ```
 
-Now, you should be able to see the back end swagger documentation at http://localhost:3000/api/api-docs
