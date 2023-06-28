@@ -9,13 +9,10 @@ ENV NODE_ENV=development
 WORKDIR /app
 
 # Copy files - ignores files from .dockerignore file.
-COPY client/ .
+COPY backend/. .
 
 # Npm install packages.
 RUN npm i
 
-# Expose port for dev server.
-EXPOSE 9000
-
-# Start the development server.
+# Nodemon Entrypoint.
 CMD ["npm", "run", "dev"]

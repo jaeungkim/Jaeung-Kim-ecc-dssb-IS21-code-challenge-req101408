@@ -12,7 +12,8 @@ const fs = require("fs").promises;
 const port = 3000;
 const corsOptions = { credentials: true, origin: ["http://localhost:3030"] };
 const connectionString =
-  "mongodb://localhost:27017/is21-jaeungkim-fullstack-db";
+  // "mongodb://localhost:27017/is21-jaeungkim-fullstack-db";
+  "mongodb://mongo:27017/is21-jaeungkim-fullstack-db";
 const mongoOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
 const swaggerOptions = {

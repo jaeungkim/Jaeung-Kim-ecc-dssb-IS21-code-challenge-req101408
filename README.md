@@ -48,10 +48,10 @@ cd Jaeung-Kim-ecc-dssb-IS21-code-challenge-req101408
 
 ### Front-End (React)
 
-1. Open Terminal and navigate to the "client" folder and install dependencies. (Front-End)
+1. Open Terminal and navigate to the "frontend" folder and install dependencies. (Front-End)
 
 ```bash
-cd Jaeung-Kim-ecc-dssb-IS21-code-challenge-req101408/client
+cd Jaeung-Kim-ecc-dssb-IS21-code-challenge-req101408/frontend
 npm install
 ```
 
@@ -65,14 +65,14 @@ Now, you should be able to see the front end application at http://localhost:303
 
 Here is the sample image at localhost
 
-<!-- ![alt text](/client/src/assets/frontend.png) -->
+<!-- ![alt text](/frontend/src/assets/frontend.png) -->
 
 ### Back-End (Node)
 
-1. Open Separate Terminal, navigate to the "server" folder and install dependencies. (Back-End)
+1. Open Separate Terminal, navigate to the "backend" folder and install dependencies. (Back-End)
 
 ```bash
-cd Jaeung-Kim-ecc-dssb-IS21-code-challenge-req101408/server
+cd Jaeung-Kim-ecc-dssb-IS21-code-challenge-req101408/backend
 npm install
 ```
 
@@ -101,4 +101,4 @@ Now, you should be able to see the back end swagger documentation at http://loca
 
 Here is the sample image at localhost
 
-<!-- ![alt text](/client/src/assets/swagger.png) -->
+<!-- ![alt text](/frontend/src/assets/swagger.png) -->

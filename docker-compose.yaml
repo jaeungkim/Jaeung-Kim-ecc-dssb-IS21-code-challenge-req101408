@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   ##### FRONTEND (NodeJS React) #####
   frontend:
@@ -6,13 +8,13 @@ services:
     restart: on-failure
     build:
       context: .
-      dockerfile: ./client/Dockerfile
+      dockerfile: ./frontend/Dockerfile
     networks:
       - jaeung-kim-is21-network
     ports:
       - 3030:3030
     volumes:
-      - ./client/src:/app/src
+      - ./frontend/src:/app/src
 
   ##### BACKEND (NodeJS Express API) #####
   backend:
@@ -22,7 +24,7 @@ services:
     restart: on-failure
     build:
       context: .
-      dockerfile: ./server/Dockerfile
+      dockerfile: ./backend/Dockerfile
     networks:
       - jaeung-kim-is21-network
     ports:
@@ -33,7 +35,23 @@ services:
       - PORT=8008
       - FRONTEND_URL=http://localhost:3030
       - BACKEND_URL=http://localhost:3000
+    depends_on:
+      - mongo
+    ##### MONGODB #####
+  mongo:
+    container_name: jaeung-kim-is21-mongo
+    image: mongo:latest
+    restart: on-failure
+    networks:
+      - jaeung-kim-is21-network
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-data:/data/db
 
 networks:
   jaeung-kim-is21-network:
-    driver: "bridge" # Internal network that allows containers to communicate with each other.
+    driver: bridge
+
+volumes:
+  mongo-data:
