@@ -4,7 +4,7 @@
 # - Faster build times with fewer dependencies.
 # - Better resource utilization & improved performance.
 FROM node:18.14.2-bullseye-slim
-ENV NODE_ENV=development
+ENV NODE_ENV=production
 
 WORKDIR /app
 
