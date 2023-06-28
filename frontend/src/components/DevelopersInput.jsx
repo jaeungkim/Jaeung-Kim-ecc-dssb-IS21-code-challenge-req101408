@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-const DevelopersInput = ({ developers, setDevelopers }) => {
+const MAX_DEVELOPERS = 5; // Define max developers here
+
+const DevelopersInput = ({ developers, setDevelopers, handleError }) => {
   const [inputValue, setInputValue] = useState("");
   const [inputDevelopers, setInputDevelopers] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     setInputDevelopers(developers);
@@ -16,9 +19,15 @@ const DevelopersInput = ({ developers, setDevelopers }) => {
       .map((developer) => developer.trim())
       .filter((developer) => developer !== "");
 
-    setDevelopers(newDevelopers);
-    setInputDevelopers(newDevelopers);
-    setInputValue("");
+    if (newDevelopers.length > MAX_DEVELOPERS) {
+      setError(`Only up to ${MAX_DEVELOPERS} developers allowed.`);
+      return;
+    } else {
+      setError(null);
+      setDevelopers(newDevelopers);
+      setInputDevelopers(newDevelopers);
+      setInputValue("");
+    }
   };
 
   // Removes a developer from the list
@@ -28,17 +37,28 @@ const DevelopersInput = ({ developers, setDevelopers }) => {
     );
     setDevelopers(updatedDevelopers);
     setInputDevelopers(updatedDevelopers);
+
+    // Clear the error if the updated list of developers has less than or equal to the max limit
+    if (updatedDevelopers.length <= MAX_DEVELOPERS) {
+      setError(null);
+    }
   };
 
   // Handles the input field change event
   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-
     const newDevelopers = e.target.value
       .split(",")
       .map((developer) => developer.trim())
       .filter((developer) => developer !== "");
 
+    if (newDevelopers.length > MAX_DEVELOPERS) {
+      setError(`Only up to ${MAX_DEVELOPERS} developers allowed.`);
+      handleError(true);
+    } else {
+      setError(null);
+      handleError(false);
+    }
+    setInputValue(e.target.value);
     setInputDevelopers(newDevelopers);
   };
 
@@ -60,6 +80,7 @@ const DevelopersInput = ({ developers, setDevelopers }) => {
           onBlur={addDevelopers}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
+
         {inputDevelopers.map((developer) => (
           <div
             key={developer}
@@ -76,6 +97,11 @@ const DevelopersInput = ({ developers, setDevelopers }) => {
           </div>
         ))}
       </div>
+      {error && (
+        <div className="text-red-500">
+          You can only enter up to 5 developers.
+        </div>
+      )}
     </div>
   );
 };

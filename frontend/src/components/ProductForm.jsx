@@ -129,23 +129,18 @@ const ProductForm = () => {
     const htmlUrls = repos.map((item) => item.html_url);
     setLocations(htmlUrls);
   }, []);
+
+  const handleChildError = (error) => {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      error,
+    }));
+  };
+
   // Event handler for input fields change
   const handleChange = (e) => {
     const { id, value } = e.target;
     setProduct((prevProduct) => ({ ...prevProduct, [id]: value }));
-  };
-
-  // Event handler for developers input field change
-  const handleDevelopersChange = (e) => {
-    const { value } = e.target;
-    const developers = value.split(",").map((developer) => developer.trim());
-    if (developers.length > 5) {
-      setError("developers", "No more than 5 developers are allowed");
-    } else {
-      setError("developers", "");
-    }
-    setProduct((prevProduct) => ({ ...prevProduct, developers: value }));
-    setNumDevelopers(developers.length);
   };
 
   // Function to set errors for specific fields
@@ -246,19 +241,10 @@ const ProductForm = () => {
             required
             error={errors.productOwnerName}
           />
-          {/* <InputField
-            label="Developers"
-            id="developers"
-            type="text"
-            value={product.developers}
-            onChange={handleDevelopersChange}
-            required
-            error={errors.developers}
-            tooltip="Separate multiple developer names with commas"
-          /> */}
           <DevelopersInput
             developers={developers}
             setDevelopers={setDevelopers}
+            handleError={handleChildError}
           />
           <InputField
             label="Start Date"
@@ -304,10 +290,11 @@ const ProductForm = () => {
         </div>
         <button
           type="submit"
-          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
-            numDevelopers > 5 ? "opacity-50 cursor-not-allowed" : ""
+          className={`inline-flex justify-center px-4 py-2 text-sm font-medium border border-transparent rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+            errors
+              ? "text-gray-500 bg-gray-200"
+              : "text-blue-900 bg-blue-100 hover:bg-blue-200 focus-visible:ring-blue-500"
           }`}
-          disabled={numDevelopers > 5}
         >
           Save
         </button>
