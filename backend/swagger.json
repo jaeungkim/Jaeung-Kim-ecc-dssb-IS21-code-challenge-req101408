@@ -14,7 +14,9 @@
   "paths": {
     "/api/product": {
       "get": {
-        "tags": ["Products"],
+        "tags": [
+          "Products"
+        ],
         "summary": "Get all products",
         "responses": {
           "200": {
@@ -35,7 +37,9 @@
     },
     "/api/addProducts": {
       "post": {
-        "tags": ["Products"],
+        "tags": [
+          "Products"
+        ],
         "summary": "Add a product",
         "requestBody": {
           "content": {
@@ -62,7 +66,9 @@
     },
     "/api/product/{productId}": {
       "put": {
-        "tags": ["Products"],
+        "tags": [
+          "Products"
+        ],
         "summary": "Update a product",
         "parameters": [
           {

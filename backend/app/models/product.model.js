@@ -8,7 +8,7 @@ const productSchema = new mongoose.Schema({
   scrumMasterName: { type: String, required: true },
   startDate: { type: Date, required: true },
   methodology: { type: String, enum: ["Agile", "Waterfall"], required: true },
-  location: {type: String, required: true},
+  location: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Product", productSchema);
