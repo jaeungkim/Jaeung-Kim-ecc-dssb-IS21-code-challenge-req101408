@@ -1,6 +1,7 @@
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import DevelopersInput from "../../shared/DevelopersInput";
+import DevelopersInput from "../DevelopersInput";
+
 const ProductEdit = ({
   isModalOpen,
   setIsModalOpen,

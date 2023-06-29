@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import repos from "../../../repos.json";
-import DevelopersInput from "../../shared/DevelopersInput";
+import DevelopersInput from "../DevelopersInput";
 import InputField from "./InputField";
 import DropdownField from "./DropdownField";
 
