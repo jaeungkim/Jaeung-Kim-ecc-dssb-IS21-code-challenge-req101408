@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Layout from "../components/Layout";
-import ProductList from "../components/ProductsList";
-import ProductForm from "../components/ProductForm";
+import Layout from "../components/shared/Layout";
+import ProductList from "../components/product/ProductsList";
+import ProductForm from "../components/product/add-product/ProductForm";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("productList");

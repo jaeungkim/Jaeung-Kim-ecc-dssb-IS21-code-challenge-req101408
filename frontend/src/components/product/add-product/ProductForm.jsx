@@ -1,89 +1,31 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import repos from "../repos.json";
-import DevelopersInput from "./DevelopersInput";
+import repos from "../../../repos.json";
+import DevelopersInput from "../../shared/DevelopersInput";
+import InputField from "./InputField";
+import DropdownField from "./DropdownField";
 
-const InputField = ({ label, id, type, value, onChange, required, error }) => {
-  return (
-    <div className="mb-4">
-      <label className="block text-gray-700 font-bold mb-2" htmlFor={id}>
-        {label}:
-      </label>
-      <div className="relative">
-        <input
-          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-            error ? "border-red-500" : ""
-          }`}
-          id={id}
-          type={type}
-          value={value}
-          onChange={onChange}
-          required={required}
-        />
-      </div>
-      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-    </div>
-  );
+const initialProduct = {
+  productName: "",
+  scrumMasterName: "",
+  productOwnerName: "",
+  developers: "",
+  startDate: "",
+  methodology: "",
+  location: "",
 };
 
-const DropdownField = ({
-  label,
-  id,
-  value,
-  onChange,
-  required,
-  error,
-  options,
-}) => {
-  return (
-    <div className="mb-4">
-      <label className="block text-gray-700 font-bold mb-2" htmlFor={id}>
-        {label}:
-      </label>
-      <div className="relative">
-        <select
-          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-            error ? "border-red-500" : ""
-          }`}
-          id={id}
-          value={value}
-          onChange={onChange}
-          required={required}
-        >
-          <option value="">Select Repository Link</option>
-          {options.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-        {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-      </div>
-    </div>
-  );
+const initialErrors = {
+  productName: "",
+  scrumMasterName: "",
+  productOwnerName: "",
+  startDate: "",
+  methodology: "",
+  developers: "",
+  location: "",
 };
 
 const ProductForm = () => {
-  const initialProduct = {
-    productName: "",
-    scrumMasterName: "",
-    productOwnerName: "",
-    developers: "",
-    startDate: "",
-    methodology: "",
-    location: "",
-  };
-
-  const initialErrors = {
-    productName: "",
-    scrumMasterName: "",
-    productOwnerName: "",
-    startDate: "",
-    methodology: "",
-    developers: "",
-    location: "",
-  };
-
   const [product, setProduct] = useState(initialProduct);
   const [developers, setDevelopers] = useState([]);
   const [errors, setErrors] = useState(initialErrors);
@@ -146,14 +88,17 @@ const ProductForm = () => {
       return;
     }
 
-    const productWithDevelopers = {...product, developers};
+    const productWithDevelopers = { ...product, developers };
 
     try {
-      await axios.post("http://localhost:3000/api/product/addProduct", productWithDevelopers);
+      await axios.post(
+        "http://localhost:3000/api/product/addProduct",
+        productWithDevelopers
+      );
       setMessage({ type: "success", text: "Product added successfully!" });
       setProduct(initialProduct);
       setDevelopers([]);
-      setErrors(initialErrors);
+      setErrors(initialProduct);
     } catch (error) {
       if (error.response) {
         setMessage({ type: "error", text: error.response.data.message });

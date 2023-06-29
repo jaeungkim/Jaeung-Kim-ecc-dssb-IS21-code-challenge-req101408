@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Dialog, Transition, Listbox } from "@headlessui/react";
-import { Fragment } from "react";
 import axios from "axios";
-import repos from "../repos.json";
+import repos from "../../repos.json";
 import ProductTable from "./ProductTable";
 import DeleteProductModal from "./DeleteProductModal";
-import ProductEdit from "./ProductEdit";
+import ProductEdit from "./edit-product/ProductEdit";
 
 const ProductList = () => {
   // State management for various properties
@@ -42,7 +40,7 @@ const ProductList = () => {
 
   const updateProduct = async (updatedProduct) => {
     try {
-      const response = await axios.put(
+      await axios.put(
         `http://localhost:3000/api/product/${updatedProduct.productId}`,
         updatedProduct
       );
@@ -82,9 +80,7 @@ const ProductList = () => {
 
   const deleteProduct = async (productId) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:3000/api/product/${productId}`
-      );
+      await axios.delete(`http://localhost:3000/api/product/${productId}`);
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product.productId !== productId)
       );
